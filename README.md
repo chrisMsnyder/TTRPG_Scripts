@@ -1,3 +1,5 @@
+**<h2>Starfinder Random Generator Scripts</h2>** 
+
 **computer_random.py** \
 *Invocation:  python computer_random.py --tier=3 --complexity=2* \
   --tier:         The tier of the computer. This should be a number between 1 and 10 per the computer rules. The higher the tier the more countermeasure nodes there will be. \
