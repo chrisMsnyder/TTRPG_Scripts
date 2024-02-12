@@ -18,6 +18,7 @@ def print_arch(arch):
     print("A = Node with 'Alarm' Countermeasure")
     print("S = Node with 'Shock Grid' Countermeasure")
     print("L = Node with 'Lockout' Countermeasure")
+    print("H = Node with 'Honeypot' Countermeasure")
     print("D = Data Access Node")
     print("C = Control Access Node")
     print("P = Ping Access Node")
@@ -51,6 +52,7 @@ def main(args):
     node_types += ['F', 'L', 'W', 'A', 'S']
     nodes = []
     ping_count = 0
+    honey_count = 0
     for n in range(int(args.complexity*args.tier)):
         node = random.sample(node_types, 1)[0]
         if node == 'O' \
@@ -58,6 +60,11 @@ def main(args):
            and random.randint(1, 100) <= 3 * args.complexity:
                 node = 'P'
                 ping_count += 1
+        elif node != 'O' \
+             and honey_count <= int(args.complexity / 5) \
+             and random.randint(1, 100) <= 3 * args.complexity:
+                node = 'H'
+                honey_count += 1
         nodes.append(node)
     access_nodes = ['D', 'C']
     filled_nodes = [(5, 5)]
