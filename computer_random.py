@@ -46,25 +46,31 @@ def set_node(arch, n, val):
     arch[n[0]][n[1]] = val
 
 
+def get_weights(complexity):
+    node_weights = {
+        'O': complexity, 
+        'F': 1, 
+        'L': 1, 
+        'W': 1, 
+        'A': 1, 
+        'S': 1, 
+        'H': 0.1 * complexity, 
+        'P': 0.1 * complexity
+    }
+    node_odds = np.array(list(node_weights.values()))
+    node_odds = np.array(node_odds / min(node_odds))
+    node_odds = node_odds / sum(node_odds)
+    return dict(zip(list(node_weights.keys()), node_odds))
+
+
+
+
 def main(args):
+    weighted_nodes = get_weights(args.complexity)
     arch = np.full((11,11), '-')
-    node_types = ['O' for x in range(int(args.complexity))]
-    node_types += ['F', 'L', 'W', 'A', 'S']
     nodes = []
-    ping_count = 0
-    honey_count = 0
     for n in range(int(args.complexity*args.tier)):
-        node = random.sample(node_types, 1)[0]
-        if node == 'O' \
-           and ping_count <= int(args.complexity / 5) \
-           and random.randint(1, 100) <= 3 * args.complexity:
-                node = 'P'
-                ping_count += 1
-        elif node != 'O' \
-             and honey_count <= int(args.complexity / 5) \
-             and random.randint(1, 100) <= 3 * args.complexity:
-                node = 'H'
-                honey_count += 1
+        node = random.choices(list(weighted_nodes.keys()), weights=list(weighted_nodes.values()), k=1)[0]
         nodes.append(node)
     access_nodes = ['D', 'C']
     filled_nodes = [(5, 5)]
